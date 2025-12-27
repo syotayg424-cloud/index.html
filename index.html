@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>L3 Portal | Athletic Luxury</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;500;800&family=Shippori+Mincho:wght@700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         :root {
@@ -22,22 +23,32 @@
         .container.active { display: flex; }
         .l3-card { background: var(--card-white); border-radius: 40px; padding: 40px 30px; box-shadow: 0 20px 50px rgba(0, 43, 91, 0.04); border: 1px solid rgba(0, 43, 91, 0.02); text-align: center; width: 100%; position: relative; }
         
+        /* 🔒 ロック演出 */
         .lock-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 100; display: none; align-items: center; justify-content: center; border-radius: 40px; }
         .lock-msg { background: var(--l3-navy); color: #fff; padding: 15px 25px; border-radius: 50px; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.2em; }
         .locked .lock-overlay { display: flex; }
         .locked > *:not(.lock-overlay) { pointer-events: none; }
 
+        /* MY PAGE デザイン固定 */
         .membership-card { border-top: 1px solid rgba(0, 43, 91, 0.1); }
         .member-status { font-size: 0.65rem; letter-spacing: 0.4em; font-weight: 500; opacity: 0.4; margin-bottom: 20px; display: block; text-transform: uppercase; }
         .member-name { font-family: 'Shippori Mincho', serif; font-size: 2.5rem; margin: 15px 0; font-weight: 800; letter-spacing: 0.15em; color: var(--l3-navy); line-height: 1.1; }
         .hourglass-visual { position: relative; width: 130px; height: 160px; margin: 30px auto; }
         .hourglass-svg { width: 100%; height: 100%; }
         .glass-frame { fill: none; stroke: var(--l3-navy); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-        .sand-fill { fill: var(--l3-lime); transition: all 2.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sand-fill { fill: var(--l3-lime); }
+        
+        /* 🟢 砂の粒アニメーション用のスタイル */
+        .sand-grain { fill: var(--l3-lime); opacity: 0.6; }
+
         .remain-label { font-size: 0.65rem; font-weight: 500; opacity: 0.3; letter-spacing: 0.3em; margin-bottom: 5px; }
         .remain-val { font-size: 2.6rem; color: var(--l3-navy); font-weight: 800; letter-spacing: -0.02em; }
         .remain-unit { font-size: 0.8rem; font-weight: 500; opacity: 0.4; letter-spacing: 0.1em; margin-left: 5px;}
-        .btn-attendance { width: 100%; padding: 22px; border-radius: 24px; background: var(--l3-navy); color: #fff; font-weight: 800; font-size: 1.1rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; }
+
+        /* 🔘 ボタンの物理的な手応え */
+        .btn-attendance { width: 100%; padding: 22px; border-radius: 24px; background: var(--l3-navy); color: #fff; font-weight: 800; font-size: 1.1rem; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: transform 0.1s; }
+        .btn-attendance:active { transform: scale(0.96); }
+
         .buddy-label { font-size: 0.7rem; font-weight: 800; opacity: 0.3; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 15px; }
         .buddy-name-display { font-family: 'Shippori Mincho', serif; font-size: 1.8rem; font-weight: 800; color: var(--l3-navy); margin-bottom: 20px; }
         .stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 25px; }
@@ -99,7 +110,7 @@
                 <g clip-path="url(#globalClip)">
                     <rect id="sand-top" class="sand-fill" x="0" y="80" width="100" height="0" />
                     <rect id="sand-bottom" class="sand-fill" x="0" y="150" width="100" height="0" />
-                    <rect fill="var(--l3-lime)" x="49" y="75" width="2" height="15" opacity="0.6" />
+                    <circle id="sand-stream" class="sand-grain" cx="50" cy="80" r="1.5" style="display:none;"/>
                 </g>
             </svg>
         </div>
@@ -177,11 +188,17 @@
                 const diff = new Date(data.graduationDate) - new Date();
                 const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
                 document.getElementById('display-days').innerHTML = `${days}<span class="remain-unit">DAYS</span>`;
+                
+                // 🟢 GSAPによる砂時計の「生きている」アニメーション
                 const progressRatio = Math.max(0, Math.min(1, (1 - (days / 1095))));
-                document.getElementById('sand-top').setAttribute('y', 80 - (70 * (1 - progressRatio)));
-                document.getElementById('sand-top').setAttribute('height', 70 * (1 - progressRatio));
-                document.getElementById('sand-bottom').setAttribute('y', 150 - (70 * progressRatio));
-                document.getElementById('sand-bottom').setAttribute('height', 70 * progressRatio);
+                gsap.to("#sand-top", { y: 80 - (70 * (1 - progressRatio)), height: 70 * (1 - progressRatio), duration: 2.5, ease: "power2.out" });
+                gsap.to("#sand-bottom", { y: 150 - (70 * progressRatio), height: 70 * progressRatio, duration: 2.5, ease: "power2.out" });
+
+                // 砂が落ちる粒のアニメーション
+                const stream = document.getElementById('sand-stream');
+                stream.style.display = 'block';
+                gsap.to(stream, { y: 65, duration: 0.8, repeat: -1, ease: "none", opacity: 0 });
+
                 if (data.buddyName) {
                     document.getElementById('buddy-display').innerText = data.buddyName;
                     document.getElementById('btn-stamp').style.display = 'block';
@@ -225,6 +242,26 @@
             }
         } catch (e) { }
     }
+
+    function switchTab(tab) {
+        gsap.fromTo(".container.active", { opacity: 1, y: 0 }, { opacity: 0, y: 10, duration: 0.3, onComplete: () => {
+            document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('nav-active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('nav-' + tab).classList.add('nav-active');
+            gsap.fromTo("#tab-" + tab, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5 });
+        }});
+    }
+
+    function toggleMember(el) {
+        const isExpanded = el.classList.contains('expanded');
+        document.querySelectorAll('.member-item').forEach(m => m.classList.remove('expanded'));
+        if (!isExpanded) {
+            el.classList.add('expanded');
+            gsap.from(el.querySelector('.detail-pane'), { opacity: 0, y: -10, duration: 0.4 });
+        }
+    }
+
     function openEditModal() {
         if(!currentUserData) return;
         document.getElementById('edit-nickname').value = currentUserData.nickname || "";
@@ -234,8 +271,15 @@
         document.getElementById('edit-hobbies').value = currentUserData.hobbies || "";
         document.getElementById('edit-manga').value = currentUserData.manga || "";
         document.getElementById('edit-modal').style.display = 'flex';
+        gsap.from(".modal-card", { scale: 0.8, opacity: 0, duration: 0.4, ease: "back.out(1.7)" });
     }
-    function closeEditModal() { document.getElementById('edit-modal').style.display = 'none'; }
+
+    function closeEditModal() {
+        gsap.to(".modal-card", { scale: 0.8, opacity: 0, duration: 0.3, onComplete: () => {
+            document.getElementById('edit-modal').style.display = 'none';
+        }});
+    }
+
     async function saveProfile() {
         const id = new URLSearchParams(window.location.search).get('id');
         try {
@@ -243,17 +287,7 @@
             if((await res.json()).status === "success") { alert("プロフィールを更新しました！"); closeEditModal(); loadPortal(); }
         } catch (e) { }
     }
-    function switchTab(tab) {
-        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('nav-active'));
-        document.getElementById('tab-' + tab).classList.add('active');
-        document.getElementById('nav-' + tab).classList.add('nav-active');
-    }
-    function toggleMember(el) {
-        const isExpanded = el.classList.contains('expanded');
-        document.querySelectorAll('.member-item').forEach(m => m.classList.remove('expanded'));
-        if (!isExpanded) el.classList.add('expanded');
-    }
+    
     async function takeAttendance() {
         const id = new URLSearchParams(window.location.search).get('id');
         try {
