@@ -77,39 +77,59 @@
 <body>
     <header class="header-logo"><img src="l3-logo-official_transparent.png" class="logo-img"></header>
     <main id="tab-mypage" class="container">
-        <div class="l3-card">
-            <span id="member-label" style="font-size: 0.6rem; opacity: 0.3; letter-spacing: 0.2em;">OFFICIAL MEMBER</span>
-            <h2 id="display-name" class="member-name">---</h2>
-            <div class="hourglass-wrapper">
-                <svg class="hourglass-svg" viewBox="0 0 100 140">
-                    <defs>
-                        <path id="top-bulb" d="M20,10 C20,10 20,60 50,65 C80,60 80,10 80,10 L20,10 Z" /><path id="bottom-bulb" d="M20,130 C20,130 20,80 50,75 C80,80 80,130 80,130 L20,130 Z" />
-                        <clipPath id="clip-top"><use href="#top-bulb" /></clipPath><clipPath id="clip-bottom"><use href="#bottom-bulb" /></clipPath>
-                    </defs>
-                    <use href="#top-bulb" class="glass-frame" /><use href="#bottom-bulb" class="glass-frame" />
-                    <g clip-path="url(#clip-top)"><rect id="sand-top" class="sand-animation sand-drain" x="0" y="10" width="100" height="60" /></g>
-                    <g clip-path="url(#clip-bottom)"><rect id="sand-bottom" class="sand-animation sand-fill" x="0" y="75" width="100" height="60" /></g>
-                    <line id="sand-stream" class="sand-stream" x1="50" y1="65" x2="50" y2="75" />
-                    <path d="M15,10 L85,10" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" /><path d="M15,130 L85,130" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" />
-                </svg>
+        <div id="trial-welcome" style="display:none; text-align:center;">
+            <div class="l3-card">
+                <span style="font-size: 0.6rem; opacity: 0.3; letter-spacing: 0.2em;">WELCOME TO L3</span>
+                <h2 class="member-name">未登録の方</h2>
+                <p style="font-size:0.75rem; line-height:1.6; opacity:0.6; padding:0 10px;">
+                    このポータルを使うには、管理者にあなたのIDを伝える必要があります。
+                </p>
+                <button id="btn-copy-id" class="btn-main" style="background:#fff; color:var(--l3-navy); border:2px solid var(--l3-navy); margin-bottom:10px;">
+                    自分のIDをコピーする
+                </button>
+                <p style="font-size:0.65rem; opacity:0.4;">
+                    コピー後、LINEで管理者に貼り付けて送ってください。
+                </p>
             </div>
-            <span id="remaining-label" style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 0.1em;">REMAINING</span>
-            <div id="display-days" style="font-size: 2.5rem; font-weight: 800; line-height: 1;">---</div><span id="days-unit" style="font-size: 0.8rem; font-weight: 800;">DAYS</span>
         </div>
-        <button id="btn-attendance" class="btn-main" style="margin-top:10px;">Loading...</button>
-        <div class="l3-card" style="margin-top:15px;">
-            <div style="font-size:0.6rem; opacity:0.3; font-weight:800; letter-spacing: 0.1em;">本日のお相手</div>
-            <div id="buddy-name" style="font-family:'Shippori Mincho',serif; font-size:1.8rem; font-weight:800; margin:5px 0 20px;">---</div>
-            <button id="btn-buddy-record" class="btn-main" style="background:var(--l3-lime); color:var(--l3-navy); margin-bottom: 20px;">交流を記録する</button>
-            <div id="stamp-root" class="stamp-grid"></div>
-        </div>
-        <div class="l3-card" style="margin-top:15px;">
-            <h3 style="font-size: 0.7rem; opacity: 0.4;">運営へのご意見箱</h3>
-            <textarea id="feedback-text" class="feedback-area" placeholder="要望やメッセージを入力してください..."></textarea>
-            <button id="btn-feedback-send" style="width:100%; padding:14px; border-radius:15px; background:var(--l3-navy); color:#fff; border:none; font-weight:800;">送信する</button>
+
+        <div id="mypage-content">
+            <div class="l3-card">
+                <span id="member-label" style="font-size: 0.6rem; opacity: 0.3; letter-spacing: 0.2em;">OFFICIAL MEMBER</span>
+                <h2 id="display-name" class="member-name">---</h2>
+                <div class="hourglass-wrapper">
+                    <svg class="hourglass-svg" viewBox="0 0 100 140">
+                        <defs>
+                            <path id="top-bulb" d="M20,10 C20,10 20,60 50,65 C80,60 80,10 80,10 L20,10 Z" /><path id="bottom-bulb" d="M20,130 C20,130 20,80 50,75 C80,80 80,130 80,130 L20,130 Z" />
+                            <clipPath id="clip-top"><use href="#top-bulb" /></clipPath><clipPath id="clip-bottom"><use href="#bottom-bulb" /></clipPath>
+                        </defs>
+                        <use href="#top-bulb" class="glass-frame" /><use href="#bottom-bulb" class="glass-frame" />
+                        <g clip-path="url(#clip-top)"><rect id="sand-top" class="sand-animation sand-drain" x="0" y="10" width="100" height="60" /></g>
+                        <g clip-path="url(#clip-bottom)"><rect id="sand-bottom" class="sand-animation sand-fill" x="0" y="75" width="100" height="60" /></g>
+                        <line id="sand-stream" class="sand-stream" x1="50" y1="65" x2="50" y2="75" />
+                        <path d="M15,10 L85,10" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" /><path d="M15,130 L85,130" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <span id="remaining-label" style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 0.1em;">REMAINING</span>
+                <div id="display-days" style="font-size: 2.5rem; font-weight: 800; line-height: 1;">---</div><span id="days-unit" style="font-size: 0.8rem; font-weight: 800;">DAYS</span>
+            </div>
+            <button id="btn-attendance" class="btn-main" style="margin-top:10px;">Loading...</button>
+            <div class="l3-card" style="margin-top:15px;">
+                <div style="font-size:0.6rem; opacity:0.3; font-weight:800; letter-spacing: 0.1em;">本日のお相手</div>
+                <div id="buddy-name" style="font-family:'Shippori Mincho',serif; font-size:1.8rem; font-weight:800; margin:5px 0 20px;">---</div>
+                <button id="btn-buddy-record" class="btn-main" style="background:var(--l3-lime); color:var(--l3-navy); margin-bottom: 20px;">交流を記録する</button>
+                <div id="stamp-root" class="stamp-grid"></div>
+            </div>
+            <div class="l3-card" style="margin-top:15px;">
+                <h3 style="font-size: 0.7rem; opacity: 0.4;">運営へのご意見箱</h3>
+                <textarea id="feedback-text" class="feedback-area" placeholder="要望やメッセージを入力してください..."></textarea>
+                <button id="btn-feedback-send" style="width:100%; padding:14px; border-radius:15px; background:var(--l3-navy); color:#fff; border:none; font-weight:800;">送信する</button>
+            </div>
         </div>
     </main>
+
     <main id="tab-list" class="container"><div class="search-container"><input type="text" id="member-search" class="search-input" placeholder="名前で検索" oninput="filterMembers()"></div><div id="list-root" class="list-grid"></div></main>
+    
     <main id="tab-court" class="container">
         <div class="admin-panel" id="admin-panel" style="display:none;">
             <button class="start-btn" onclick="postAction('determine_buddy')" style="background:#fff; color:var(--l3-navy); margin-bottom:10px;">バディを決定する</button>
@@ -119,13 +139,16 @@
         <div id="court-root" class="court-grid"></div>
         <div id="rest-zone-root" style="margin-top: 15px;"></div>
     </main>
+
     <main id="tab-info" class="container active"><div id="info-root"></div></main>
+
     <nav class="nav">
         <div class="nav-item" id="nav-mypage" onclick="switchTab('mypage')"><span class="nav-icon">👤</span><span class="nav-text">My Page</span></div>
         <div class="nav-item" id="nav-list" onclick="switchTab('list')"><span class="nav-icon">👥</span><span class="nav-text">List</span></div>
         <div class="nav-item" id="nav-court" onclick="switchTab('court')"><span class="nav-icon">🏸</span><span class="nav-text">Court</span></div>
         <div class="nav-item nav-active" id="nav-info" onclick="switchTab('info')"><span class="nav-icon">📢</span><span class="nav-text">Info</span></div>
     </nav>
+
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycby21EhDYkN_Gjzad4ks8hsyquV61hhuI2VKylGAQwyYvpmvP1iZowqIaM6RdR64HVJeOA/exec";
         const LIFF_ID = "2008760618-igOldYtb";
@@ -136,6 +159,16 @@
                 await liff.init({ liffId: LIFF_ID });
                 if (!liff.isLoggedIn()) { liff.login(); return; }
                 const profile = await liff.getProfile();
+                
+                // 【新設】コピーボタンの処理
+                const copyBtn = document.getElementById('btn-copy-id');
+                if(copyBtn) {
+                    copyBtn.onclick = () => {
+                        navigator.clipboard.writeText(profile.userId);
+                        alert("IDをコピーしました！LINEで管理者に貼り付けて送ってください。");
+                    };
+                }
+
                 await refreshData(profile.userId);
                 switchTab('mypage');
             } catch (e) { switchTab('info'); }
@@ -144,14 +177,20 @@
         async function refreshData(userId) {
             const res = await fetch(`${GAS_URL}?id=${userId}`);
             globalData = await res.json();
-            if (globalData.infoData) renderInfo(globalData.infoData);
-            if (globalData && globalData.myId) {
+            
+            // 【修正点】未登録ユーザー（新ゲスト）への対応
+            if (!globalData.myId) {
+                document.getElementById('trial-welcome').style.display = 'block';
+                document.getElementById('mypage-content').style.display = 'none';
+                ['nav-list', 'nav-court'].forEach(id => document.getElementById(id).style.display = 'none');
+            } else {
+                document.getElementById('trial-welcome').style.display = 'none';
+                document.getElementById('mypage-content').style.display = 'block';
+                ['nav-list'].forEach(id => document.getElementById(id).style.display = 'flex');
                 renderUI(globalData);
                 document.getElementById('nav-court').style.display = globalData.isAdmin ? 'flex' : 'none';
-            } else {
-                ['nav-mypage', 'nav-list', 'nav-court'].forEach(id => document.getElementById(id).style.display = 'none');
-                switchTab('info');
             }
+            if (globalData.infoData) renderInfo(globalData.infoData);
         }
 
         function renderUI(data) {
@@ -159,7 +198,7 @@
             document.getElementById('buddy-name').innerText = data.buddyName || "---";
             document.getElementById('admin-panel').style.display = data.isAdmin ? 'flex' : 'none';
             
-            // 【修正点】体験入会かどうかの判定
+            // 【修正点】スプレッドシートの「体験」文字による表示切り替え
             const isTrial = (data.joinDate === "体験" || data.graduationDate === "体験");
             document.getElementById('member-label').innerText = isTrial ? "TRIAL MEMBER" : "OFFICIAL MEMBER";
             
@@ -218,7 +257,7 @@
             const target = document.getElementById('tab-'+t); if (target) target.classList.add('active');
             const nav = document.getElementById('nav-'+t); if (nav) nav.classList.add('nav-active');
             if (t === 'list') renderListLazy();
-            if (globalData && (t === 'mypage' || t === 'court')) refreshData(globalData.myId);
+            if (globalData && globalData.myId && (t === 'mypage' || t === 'court')) refreshData(globalData.myId);
         }
 
         function updateAttendanceButton(attended) {
@@ -234,13 +273,13 @@
             if (!s || !e || s === "体験" || e === "体験") {
                 sand.forEach(el => el.style.animationPlayState = 'paused');
                 document.getElementById('display-days').innerText = "NEW";
-                document.getElementById('remaining-label').innerText = "HELLO!";
+                document.getElementById('remaining-label').innerText = "WELCOME!";
                 document.getElementById('days-unit').innerText = "PLAYER";
                 return;
             }
             
             const start = new Date(s); const end = new Date(e); const now = new Date();
-            if (isNaN(start.getTime())) { // 日付として不正な場合も停止
+            if (isNaN(start.getTime())) { 
                 sand.forEach(el => el.style.animationPlayState = 'paused');
                 document.getElementById('display-days').innerText = "---";
                 return;
