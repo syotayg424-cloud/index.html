@@ -77,39 +77,52 @@
 <body>
     <header class="header-logo"><img src="l3-logo-official_transparent.png" class="logo-img"></header>
     <main id="tab-mypage" class="container">
-        <div class="l3-card">
-            <span style="font-size: 0.6rem; opacity: 0.3; letter-spacing: 0.2em;">OFFICIAL MEMBER</span>
-            <h2 id="display-name" class="member-name">---</h2>
-            <div class="hourglass-wrapper">
-                <svg class="hourglass-svg" viewBox="0 0 100 140">
-                    <defs>
-                        <path id="top-bulb" d="M20,10 C20,10 20,60 50,65 C80,60 80,10 80,10 L20,10 Z" /><path id="bottom-bulb" d="M20,130 C20,130 20,80 50,75 C80,80 80,130 80,130 L20,130 Z" />
-                        <clipPath id="clip-top"><use href="#top-bulb" /></clipPath><clipPath id="clip-bottom"><use href="#bottom-bulb" /></clipPath>
-                    </defs>
-                    <use href="#top-bulb" class="glass-frame" /><use href="#bottom-bulb" class="glass-frame" />
-                    <g clip-path="url(#clip-top)"><rect id="sand-top" class="sand-animation sand-drain" x="0" y="10" width="100" height="60" /></g>
-                    <g clip-path="url(#clip-bottom)"><rect id="sand-bottom" class="sand-animation sand-fill" x="0" y="75" width="100" height="60" /></g>
-                    <line id="sand-stream" class="sand-stream" x1="50" y1="65" x2="50" y2="75" />
-                    <path d="M15,10 L85,10" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" /><path d="M15,130 L85,130" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" />
-                </svg>
+        <div id="trial-welcome" style="display:none; text-align:center;">
+            <div class="l3-card">
+                <span style="font-size: 0.6rem; opacity: 0.3; letter-spacing: 0.2em;">WELCOME TO L3</span>
+                <h2 class="member-name">体験入会の方</h2>
+                <p style="font-size:0.8rem; line-height:1.6; opacity:0.6; padding:0 10px;">ポータルを使って出席や試合マッチングに参加できます！</p>
+                <button onclick="registerTrial()" class="btn-main btn-attend" style="margin-top:10px;">体験入会で利用開始</button>
             </div>
-            <span style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 0.1em;">REMAINING</span>
-            <div id="display-days" style="font-size: 2.5rem; font-weight: 800; line-height: 1;">---</div><span style="font-size: 0.8rem; font-weight: 800;">DAYS</span>
         </div>
-        <button id="btn-attendance" class="btn-main" style="margin-top:10px;">Loading...</button>
-        <div class="l3-card" style="margin-top:15px;">
-            <div style="font-size:0.6rem; opacity:0.3; font-weight:800; letter-spacing: 0.1em;">本日のお相手</div>
-            <div id="buddy-name" style="font-family:'Shippori Mincho',serif; font-size:1.8rem; font-weight:800; margin:5px 0 20px;">---</div>
-            <button id="btn-buddy-record" class="btn-main" style="background:var(--l3-lime); color:var(--l3-navy); margin-bottom: 20px;">交流を記録する</button>
-            <div id="stamp-root" class="stamp-grid"></div>
-        </div>
-        <div class="l3-card" style="margin-top:15px;">
-            <h3 style="font-size: 0.7rem; opacity: 0.4;">運営へのご意見箱</h3>
-            <textarea id="feedback-text" class="feedback-area" placeholder="要望やメッセージを入力してください..."></textarea>
-            <button id="btn-feedback-send" style="width:100%; padding:14px; border-radius:15px; background:var(--l3-navy); color:#fff; border:none; font-weight:800;">送信する</button>
+
+        <div id="mypage-content">
+            <div class="l3-card">
+                <span style="font-size: 0.6rem; opacity: 0.3; letter-spacing: 0.2em;">OFFICIAL MEMBER</span>
+                <h2 id="display-name" class="member-name">---</h2>
+                <div class="hourglass-wrapper">
+                    <svg class="hourglass-svg" viewBox="0 0 100 140">
+                        <defs>
+                            <path id="top-bulb" d="M20,10 C20,10 20,60 50,65 C80,60 80,10 80,10 L20,10 Z" /><path id="bottom-bulb" d="M20,130 C20,130 20,80 50,75 C80,80 80,130 80,130 L20,130 Z" />
+                            <clipPath id="clip-top"><use href="#top-bulb" /></clipPath><clipPath id="clip-bottom"><use href="#bottom-bulb" /></clipPath>
+                        </defs>
+                        <use href="#top-bulb" class="glass-frame" /><use href="#bottom-bulb" class="glass-frame" />
+                        <g clip-path="url(#clip-top)"><rect id="sand-top" class="sand-animation sand-drain" x="0" y="10" width="100" height="60" /></g>
+                        <g clip-path="url(#clip-bottom)"><rect id="sand-bottom" class="sand-animation sand-fill" x="0" y="75" width="100" height="60" /></g>
+                        <line id="sand-stream" class="sand-stream" x1="50" y1="65" x2="50" y2="75" />
+                        <path d="M15,10 L85,10" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" /><path d="M15,130 L85,130" stroke="var(--l3-navy)" stroke-width="4" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <span style="font-size: 0.7rem; opacity: 0.5; letter-spacing: 0.1em;">REMAINING</span>
+                <div id="display-days" style="font-size: 2.5rem; font-weight: 800; line-height: 1;">---</div><span style="font-size: 0.8rem; font-weight: 800;">DAYS</span>
+            </div>
+            <button id="btn-attendance" class="btn-main" style="margin-top:10px;">Loading...</button>
+            <div class="l3-card" style="margin-top:15px;">
+                <div style="font-size:0.6rem; opacity:0.3; font-weight:800; letter-spacing: 0.1em;">本日のお相手</div>
+                <div id="buddy-name" style="font-family:'Shippori Mincho',serif; font-size:1.8rem; font-weight:800; margin:5px 0 20px;">---</div>
+                <button id="btn-buddy-record" class="btn-main" style="background:var(--l3-lime); color:var(--l3-navy); margin-bottom: 20px;">交流を記録する</button>
+                <div id="stamp-root" class="stamp-grid"></div>
+            </div>
+            <div class="l3-card" style="margin-top:15px;">
+                <h3 style="font-size: 0.7rem; opacity: 0.4;">運営へのご意見箱</h3>
+                <textarea id="feedback-text" class="feedback-area" placeholder="要望やメッセージを入力してください..."></textarea>
+                <button id="btn-feedback-send" style="width:100%; padding:14px; border-radius:15px; background:var(--l3-navy); color:#fff; border:none; font-weight:800;">送信する</button>
+            </div>
         </div>
     </main>
+
     <main id="tab-list" class="container"><div class="search-container"><input type="text" id="member-search" class="search-input" placeholder="名前で検索" oninput="filterMembers()"></div><div id="list-root" class="list-grid"></div></main>
+    
     <main id="tab-court" class="container">
         <div class="admin-panel" id="admin-panel" style="display:none;">
             <button class="start-btn" onclick="postAction('determine_buddy')" style="background:#fff; color:var(--l3-navy); margin-bottom:10px;">バディを決定する</button>
@@ -119,13 +132,16 @@
         <div id="court-root" class="court-grid"></div>
         <div id="rest-zone-root" style="margin-top: 15px;"></div>
     </main>
+
     <main id="tab-info" class="container active"><div id="info-root"></div></main>
+
     <nav class="nav">
         <div class="nav-item" id="nav-mypage" onclick="switchTab('mypage')"><span class="nav-icon">👤</span><span class="nav-text">My Page</span></div>
         <div class="nav-item" id="nav-list" onclick="switchTab('list')"><span class="nav-icon">👥</span><span class="nav-text">List</span></div>
         <div class="nav-item" id="nav-court" onclick="switchTab('court')"><span class="nav-icon">🏸</span><span class="nav-text">Court</span></div>
         <div class="nav-item nav-active" id="nav-info" onclick="switchTab('info')"><span class="nav-icon">📢</span><span class="nav-text">Info</span></div>
     </nav>
+
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycby21EhDYkN_Gjzad4ks8hsyquV61hhuI2VKylGAQwyYvpmvP1iZowqIaM6RdR64HVJeOA/exec";
         const LIFF_ID = "2008760618-igOldYtb";
@@ -144,15 +160,35 @@
         async function refreshData(userId) {
             const res = await fetch(`${GAS_URL}?id=${userId}`);
             globalData = await res.json();
-            if (globalData.infoData) renderInfo(globalData.infoData);
-            if (globalData && globalData.myId) {
-                renderUI(globalData);
-                // 【修正点】管理者以外はメニューからCourtを消す
-                document.getElementById('nav-court').style.display = globalData.isAdmin ? 'flex' : 'none';
+            
+            // 体験者フラグのチェック
+            if (globalData.isNewGuest) {
+                document.getElementById('trial-welcome').style.display = 'block';
+                document.getElementById('mypage-content').style.display = 'none';
+                ['nav-list', 'nav-court'].forEach(id => document.getElementById(id).style.display = 'none');
             } else {
-                ['nav-mypage', 'nav-list', 'nav-court'].forEach(id => document.getElementById(id).style.display = 'none');
-                switchTab('info');
+                document.getElementById('trial-welcome').style.display = 'none';
+                document.getElementById('mypage-content').style.display = 'block';
+                ['nav-list'].forEach(id => document.getElementById(id).style.display = 'flex');
+                renderUI(globalData);
+                // 管理者以外はCourtタブを非表示
+                document.getElementById('nav-court').style.display = globalData.isAdmin ? 'flex' : 'none';
             }
+            if (globalData.infoData) renderInfo(globalData.infoData);
+        }
+
+        // 体験入会登録 & 自動誘導ロジック
+        async function registerTrial() {
+            const profile = await liff.getProfile();
+            const userName = prompt("お名前を入力してください（フルネーム）");
+            if (!userName) return;
+            await postAction('register_trial', { lineId: profile.userId, userName: userName });
+            await postAction('attendance');
+            alert("登録しました！スタイル（うさぎ・キツネ）を選んでプロフィールを完成させましょう！");
+            await refreshData(profile.userId); 
+            switchTab('list');
+            renderListLazy();
+            setTimeout(() => startEdit(null, globalData.myId), 500); // 自分の編集画面を自動で開く
         }
 
         function renderUI(data) {
@@ -172,23 +208,42 @@
         }
 
         function renderListLazy() {
-            if (listRendered || !globalData) return;
-            document.getElementById('list-root').innerHTML = globalData.allMembers.map(m => `<div class="m-card" onclick="toggleMember(this, '${m.trueId}')">${m.trueId === globalData.myId ? `<button class="edit-btn" onclick="startEdit(event, '${m.trueId}')">Edit</button>` : ''}<div class="m-icon">${m.photo ? `<img src="${m.photo}" class="m-img">` : m.name.charAt(0)}</div><span style="font-weight:800; font-size:0.85rem;">${m.name}</span><br><small style="opacity:0.4;">${m.term}期</small><div class="detail-pane" id="detail-${m.trueId}"><div class="d-row"><span class="d-label">STYLE</span><span class="d-val">${m.level === 'キツネ' ? '🦊' : '🐰'}</span></div><div class="d-row"><span class="d-label">NICKNAME</span><span class="d-val">${m.nickname || "---"}</span></div><div class="d-row"><span class="d-label">BIRTH</span><span class="d-val">${m.birthYear || "---"}</span></div><div class="d-row"><span class="d-label">EXP</span><span class="d-val">${m.experience || "---"}</span></div><div class="d-row"><span class="d-label">HOBBY</span><span class="d-val">${m.hobby || "---"}</span></div><div class="d-row"><span class="d-label">MANGA</span><span class="d-val">${m.manga || "---"}</span></div><div class="d-row"><span class="d-label">RACKET</span><span class="d-val">${m.racket || "---"}</span></div></div></div>`).join('');
+            if (listRendered || !globalData || globalData.isNewGuest) return;
+            document.getElementById('list-root').innerHTML = globalData.allMembers.map(m => `
+                <div class="m-card" onclick="toggleMember(this, '${m.trueId}')">
+                    ${m.trueId === globalData.myId ? `<button class="edit-btn" onclick="startEdit(event, '${m.trueId}')">Edit</button>` : ''}
+                    <div class="m-icon">${m.photo ? `<img src="${m.photo}" class="m-img">` : m.name.charAt(0)}</div>
+                    <span style="font-weight:800; font-size:0.85rem;">${m.name}</span><br><small style="opacity:0.4;">${m.term}期</small>
+                    <div class="detail-pane" id="detail-${m.trueId}">
+                        <div class="d-row"><span class="d-label">STYLE</span><span class="d-val">${m.level === 'キツネ' ? '🦊' : '🐰'}</span></div>
+                        <div class="d-row"><span class="d-label">NICKNAME</span><span class="d-val">${m.nickname || "---"}</span></div>
+                        <div class="d-row"><span class="d-label">BIRTH</span><span class="d-val">${m.birthYear || "---"}</span></div>
+                        <div class="d-row"><span class="d-label">EXP</span><span class="d-val">${m.experience || "---"}</span></div>
+                        <div class="d-row"><span class="d-label">HOBBY</span><span class="d-val">${m.hobby || "---"}</span></div>
+                        <div class="d-row"><span class="d-label">MANGA</span><span class="d-val">${m.manga || "---"}</span></div>
+                        <div class="d-row"><span class="d-label">RACKET</span><span class="d-val">${m.racket || "---"}</span></div>
+                    </div>
+                </div>`).join('');
             listRendered = true;
         }
 
         function renderCourts(data) {
             const root = document.getElementById('court-root');
             const restRoot = document.getElementById('rest-zone-root');
-            if(!data || !data.assignments || data.assignments.length === 0) { root.innerHTML = `<div class="l3-card" style="opacity:0.5; padding:40px 20px;">🏸 マッチングを開始してください</div>`; restRoot.innerHTML = ""; return; }
+            if(!data || !data.assignments || data.assignments.length === 0) { 
+                root.innerHTML = `<div class="l3-card" style="opacity:0.5; padding:40px 20px;">🏸 マッチングを開始してください</div>`; 
+                restRoot.innerHTML = ""; return; 
+            }
             root.innerHTML = data.assignments.map(a => `<div class="court-box"><span class="court-label">${a.type === 'うさぎ' ? '🐰 うさぎ' : a.type === 'キツネ' ? '🦊 キツネ' : '🏸 MIX'} COURT</span><div class="badminton-court"><div class="net-line"></div><div class="court-half"><div class="player-tag">${a.players[0].name}</div><div class="player-tag">${a.players[1].name}</div></div><div class="court-half"><div class="player-tag">${a.players[2].name}</div><div class="player-tag">${a.players[3].name}</div></div></div></div>`).join('');
-            if (data.resters && data.resters.length > 0) { restRoot.innerHTML = `<div class="rest-zone"><small style="font-weight:800; color:#94a3b8; letter-spacing:0.1em;">RESTING MEMBERS</small><div class="rest-list">${data.resters.map(m => `<div class="rest-tag">${m.name}</div>`).join('')}</div></div>`; } else { restRoot.innerHTML = ""; }
+            if (data.resters && data.resters.length > 0) { 
+                restRoot.innerHTML = `<div class="rest-zone"><small style="font-weight:800; color:#94a3b8; letter-spacing:0.1em;">RESTING MEMBERS</small><div class="rest-list">${data.resters.map(m => `<div class="rest-tag">${m.name}</div>`).join('')}</div></div>`; 
+            } else { restRoot.innerHTML = ""; }
         }
 
         async function postAction(action, extra = {}) {
-            const res = await fetch(GAS_URL, { method: "POST", body: JSON.stringify({ action, userId: globalData.myId, ...extra }) });
+            const res = await fetch(GAS_URL, { method: "POST", body: JSON.stringify({ action, userId: globalData ? globalData.myId : extra.userId, ...extra }) });
             globalData = await res.json();
-            renderUI(globalData);
+            if (!globalData.isNewGuest) renderUI(globalData);
             if (action === 'determine_buddy') alert("バディ決定！");
             if (action === 'generate_matches') alert("振り分け完了！");
         }
@@ -200,7 +255,7 @@
             const nav = document.getElementById('nav-'+t); if (nav) nav.classList.add('nav-active');
             if (t === 'list') renderListLazy();
             // タブを切り替えるたびに最新の状態に同期（最速・リアルタイム）
-            if (globalData && (t === 'mypage' || t === 'court')) refreshData(globalData.myId);
+            if (globalData && !globalData.isNewGuest && (t === 'mypage' || t === 'court')) refreshData(globalData.myId);
         }
 
         function updateAttendanceButton(attended) {
@@ -226,6 +281,14 @@
         async function startMatching() { if(confirm(`振り分けを開始しますか？`)) postAction('generate_matches', { mode: currentMode }); }
         async function handleAttendance(action, msg) { if (confirm(msg)) postAction(action); }
         async function sendFeedback() { const text = document.getElementById('feedback-text').value; if (!text) return; await postAction('feedback', { message: text }); alert("送信しました！"); document.getElementById('feedback-text').value = ""; }
+
+        // プロフィール編集ロジック
+        function startEdit(e, id) {
+            if(e) e.stopPropagation(); const m = globalData.allMembers.find(member => member.trueId === id); const pane = document.getElementById(`detail-${id}`);
+            pane.style.display = "block"; pane.closest('.m-card').classList.add('expanded');
+            pane.innerHTML = `<div style="text-align:left; margin-bottom:10px;"><small style="font-weight:800; color:var(--l3-orange);">EDIT PROFILE</small></div><select class="edit-select" id="edit-level"><option value="うさぎ" ${m.level === 'うさぎ' ? 'selected' : ''}>🐰 うさぎスタイル</option><option value="キツネ" ${m.level === 'キツネ' ? 'selected' : ''}>🦊 キツネスタイル</option></select><input class="edit-input" id="edit-nick" value="${m.nickname || ''}" placeholder="Nickname"><input class="edit-input" id="edit-birth" value="${m.birthYear || ''}" placeholder="Birth Year"><input class="edit-input" id="edit-exp" value="${m.experience || ''}" placeholder="Badminton Experience"><input class="edit-input" id="edit-hobby" value="${m.hobby || ''}" placeholder="Hobby"><input class="edit-input" id="edit-manga" value="${m.manga || ''}" placeholder="Favorite Manga"><input class="edit-input" id="edit-racket" value="${m.racket || ''}" placeholder="Racket"><button class="btn-main btn-attend" onclick="saveProfile('${id}')">SAVE</button>`;
+        }
+        async function saveProfile(id) { const params = { action: "edit_profile", userId: id, level: document.getElementById('edit-level').value, nickname: document.getElementById('edit-nick').value, birthYear: document.getElementById('edit-birth').value, experience: document.getElementById('edit-exp').value, hobby: document.getElementById('edit-hobby').value, manga: document.getElementById('edit-manga').value, racket: document.getElementById('edit-racket').value }; await postAction('edit_profile', params); alert("保存完了！"); }
 
         initPortal();
     </script>
