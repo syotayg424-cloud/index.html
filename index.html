@@ -155,21 +155,26 @@
         let globalData = null; let currentMode = 'MIX'; let listRendered = false;
 
         async function initPortal() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlId = urlParams.get('id');
             try {
                 await liff.init({ liffId: LIFF_ID });
-                if (!liff.isLoggedIn()) { liff.login(); return; }
-                const profile = await liff.getProfile();
-                
-                // 【新設】コピーボタンの処理
+                let targetId = urlId;
+                if (!targetId) {
+                    if (!liff.isLoggedIn()) { liff.login(); return; }
+                    const profile = await liff.getProfile();
+                    targetId = profile.userId;
+                }
                 const copyBtn = document.getElementById('btn-copy-id');
                 if(copyBtn) {
                     copyBtn.onclick = () => {
-                        navigator.clipboard.writeText(profile.userId);
-                        alert("IDをコピーしました！LINEで管理者に貼り付けて送ってください。");
+                        liff.getProfile().then(p => {
+                            navigator.clipboard.writeText(p.userId);
+                            alert("IDをコピーしました！LINEで管理者に貼り付けて送ってください。");
+                        });
                     };
                 }
-
-                await refreshData(profile.userId);
+                await refreshData(targetId);
                 switchTab('mypage');
             } catch (e) { switchTab('info'); }
         }
@@ -177,8 +182,6 @@
         async function refreshData(userId) {
             const res = await fetch(`${GAS_URL}?id=${userId}`);
             globalData = await res.json();
-            
-            // 【修正点】未登録ユーザー（新ゲスト）への対応
             if (!globalData.myId) {
                 document.getElementById('trial-welcome').style.display = 'block';
                 document.getElementById('mypage-content').style.display = 'none';
@@ -197,11 +200,8 @@
             document.getElementById('display-name').innerText = data.userName;
             document.getElementById('buddy-name').innerText = data.buddyName || "---";
             document.getElementById('admin-panel').style.display = data.isAdmin ? 'flex' : 'none';
-            
-            // 【修正点】スプレッドシートの「体験」文字による表示切り替え
             const isTrial = (data.joinDate === "体験" || data.graduationDate === "体験");
             document.getElementById('member-label').innerText = isTrial ? "TRIAL MEMBER" : "OFFICIAL MEMBER";
-            
             updateHourglass(data.joinDate, data.graduationDate);
             renderStamps(data.stampIcons);
             renderCourts(data.courtData);
@@ -215,7 +215,7 @@
         }
 
         function renderListLazy() {
-            if (listRendered || !globalData) return;
+            if (listRendered || !globalData || !globalData.myId) return;
             document.getElementById('list-root').innerHTML = globalData.allMembers.map(m => `
                 <div class="m-card" onclick="toggleMember(this, '${m.trueId}')">
                     ${m.trueId === globalData.myId ? `<button class="edit-btn" onclick="startEdit(event, '${m.trueId}')">Edit</button>` : ''}
@@ -238,9 +238,14 @@
         function renderCourts(data) {
             const root = document.getElementById('court-root');
             const restRoot = document.getElementById('rest-zone-root');
-            if(!data || !data.assignments || data.assignments.length === 0) { root.innerHTML = `<div class="l3-card" style="opacity:0.5; padding:40px 20px;">🏸 マッチングを開始してください</div>`; restRoot.innerHTML = ""; return; }
+            if(!data || !data.assignments || data.assignments.length === 0) { 
+                root.innerHTML = `<div class="l3-card" style="opacity:0.5; padding:40px 20px;">🏸 マッチングを開始してください</div>`; 
+                restRoot.innerHTML = ""; return; 
+            }
             root.innerHTML = data.assignments.map(a => `<div class="court-box"><span class="court-label">${a.type === 'うさぎ' ? '🐰 うさぎ' : a.type === 'キツネ' ? '🦊 キツネ' : '🏸 MIX'} COURT</span><div class="badminton-court"><div class="net-line"></div><div class="court-half"><div class="player-tag">${a.players[0].name}</div><div class="player-tag">${a.players[1].name}</div></div><div class="court-half"><div class="player-tag">${a.players[2].name}</div><div class="player-tag">${a.players[3].name}</div></div></div></div>`).join('');
-            if (data.resters && data.resters.length > 0) { restRoot.innerHTML = `<div class="rest-zone"><small style="font-weight:800; color:#94a3b8; letter-spacing:0.1em;">RESTING MEMBERS</small><div class="rest-list">${data.resters.map(m => `<div class="rest-tag">${m.name}</div>`).join('')}</div></div>`; } else { restRoot.innerHTML = ""; }
+            if (data.resters && data.resters.length > 0) { 
+                restRoot.innerHTML = `<div class="rest-zone"><small style="font-weight:800; color:#94a3b8; letter-spacing:0.1em;">RESTING MEMBERS</small><div class="rest-list">${data.resters.map(m => `<div class="rest-tag">${m.name}</div>`).join('')}</div></div>`; 
+            } else { restRoot.innerHTML = ""; }
         }
 
         async function postAction(action, extra = {}) {
@@ -269,7 +274,6 @@
 
         function updateHourglass(s, e) {
             const sand = document.querySelectorAll('.sand-animation');
-            // 【修正点】「体験」という文字が入っている場合は砂時計を停止
             if (!s || !e || s === "体験" || e === "体験") {
                 sand.forEach(el => el.style.animationPlayState = 'paused');
                 document.getElementById('display-days').innerText = "NEW";
@@ -277,20 +281,16 @@
                 document.getElementById('days-unit').innerText = "PLAYER";
                 return;
             }
-            
             const start = new Date(s); const end = new Date(e); const now = new Date();
             if (isNaN(start.getTime())) { 
                 sand.forEach(el => el.style.animationPlayState = 'paused');
                 document.getElementById('display-days').innerText = "---";
                 return;
             }
-
             const total = (end - start) / 1000; const elapsed = (now - start) / 1000;
             if (total <= 0) return; document.documentElement.style.setProperty('--sand-duration', `${total}s`); document.documentElement.style.setProperty('--sand-delay', `-${elapsed}s`);
-            
             document.getElementById('remaining-label').innerText = "REMAINING";
             document.getElementById('days-unit').innerText = "DAYS";
-            
             if (elapsed >= total) { sand.forEach(el => el.style.animationPlayState = 'paused'); document.getElementById('display-days').innerText = "0"; }
             else { sand.forEach(el => el.style.animationPlayState = 'running'); document.getElementById('display-days').innerText = Math.max(0, Math.ceil((end - now) / 86400000)); }
         }
@@ -303,10 +303,16 @@
         async function handleAttendance(action, msg) { if (confirm(msg)) postAction(action); }
         async function sendFeedback() { const text = document.getElementById('feedback-text').value; if (!text) return; await postAction('feedback', { message: text }); alert("送信しました！"); document.getElementById('feedback-text').value = ""; }
 
+        // 【修正箇所】スタイル選択に詳細説明を追加
         function startEdit(e, id) {
             if(e) e.stopPropagation(); const m = globalData.allMembers.find(member => member.trueId === id); const pane = document.getElementById(`detail-${id}`);
             pane.style.display = "block"; pane.closest('.m-card').classList.add('expanded');
-            pane.innerHTML = `<div style="text-align:left; margin-bottom:10px;"><small style="font-weight:800; color:var(--l3-orange);">EDIT PROFILE</small></div><select class="edit-select" id="edit-level"><option value="うさぎ" ${m.level === 'うさぎ' ? 'selected' : ''}>🐰 うさぎスタイル</option><option value="キツネ" ${m.level === 'キツネ' ? 'selected' : ''}>🦊 キツネスタイル</option></select><input class="edit-input" id="edit-nick" value="${m.nickname || ''}" placeholder="Nickname"><input class="edit-input" id="edit-birth" value="${m.birthYear || ''}" placeholder="Birth Year"><input class="edit-input" id="edit-exp" value="${m.experience || ''}" placeholder="Badminton Experience"><input class="edit-input" id="edit-hobby" value="${m.hobby || ''}" placeholder="Hobby"><input class="edit-input" id="edit-manga" value="${m.manga || ''}" placeholder="Favorite Manga"><input class="edit-input" id="edit-racket" value="${m.racket || ''}" placeholder="Racket"><button class="btn-main btn-attend" onclick="saveProfile('${id}')">SAVE</button>`;
+            pane.innerHTML = `<div style="text-align:left; margin-bottom:10px;"><small style="font-weight:800; color:var(--l3-orange);">EDIT PROFILE</small></div>
+            <select class="edit-select" id="edit-level">
+                <option value="うさぎ" ${m.level === 'うさぎ' ? 'selected' : ''}>🐰 うさぎ（部活などの経験がない初心者）</option>
+                <option value="キツネ" ${m.level === 'キツネ' ? 'selected' : ''}>🦊 キツネ（部活などで概ね1年以上の経験がある経験者）</option>
+            </select>
+            <input class="edit-input" id="edit-nick" value="${m.nickname || ''}" placeholder="Nickname"><input class="edit-input" id="edit-birth" value="${m.birthYear || ''}" placeholder="Birth Year"><input class="edit-input" id="edit-exp" value="${m.experience || ''}" placeholder="Badminton Experience"><input class="edit-input" id="edit-hobby" value="${m.hobby || ''}" placeholder="Hobby"><input class="edit-input" id="edit-manga" value="${m.manga || ''}" placeholder="Favorite Manga"><input class="edit-input" id="edit-racket" value="${m.racket || ''}" placeholder="Racket"><button class="btn-main btn-attend" onclick="saveProfile('${id}')">SAVE</button>`;
         }
         async function saveProfile(id) { const params = { action: "edit_profile", userId: id, level: document.getElementById('edit-level').value, nickname: document.getElementById('edit-nick').value, birthYear: document.getElementById('edit-birth').value, experience: document.getElementById('edit-exp').value, hobby: document.getElementById('edit-hobby').value, manga: document.getElementById('edit-manga').value, racket: document.getElementById('edit-racket').value }; await postAction('edit_profile', params); alert("保存完了！"); }
 
